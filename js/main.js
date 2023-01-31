@@ -89,7 +89,7 @@ function debounce(fn) {
     clearTimeout(timer);
     timer = setTimeout(() => {
       fn();
-    }, 1000);
+    }, 500);
   };
 }
 
