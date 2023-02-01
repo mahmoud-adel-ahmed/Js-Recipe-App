@@ -5,7 +5,6 @@ let recipesDetails = document.querySelector(".recipes-details");
 let recipeInp = document.querySelector(".recipe");
 
 function drawUiRecipes(meals = [], errorMsg = "") {
-  recipesContainer.innerHTML = "";
   let recipe = meals?.map((recipe) => {
     return `<div class="box">
         <div class="img">
@@ -20,10 +19,13 @@ function drawUiRecipes(meals = [], errorMsg = "") {
     recipe?.join("") || `<h2 class="error">${errorMsg}</h2>`;
 }
 
-async function getRepos(search = "beef") {
+let defaultVal = "";
+async function getRepos(searchTerm) {
   try {
     let response = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`
+      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${
+        searchTerm || defaultVal
+      }`
     );
     if (response.ok) {
       let recipes = await response.json();
@@ -42,8 +44,10 @@ async function getRepos(search = "beef") {
 getRepos();
 
 function updateRecipe() {
+  recipesContainer.innerHTML = "";
   getRepos(recipeInp?.value || "");
   recipeInp.value = "";
+  searchInp.value = "";
 }
 
 searchBtn.addEventListener("click", (e) => {
@@ -98,7 +102,8 @@ async function searchRecipes() {
   let filteredMeals = meals?.filter((recipe) =>
     recipe.strMeal.toLowerCase().includes(searchInp.value.toLowerCase())
   );
+  recipesContainer.innerHTML = "";
   drawUiRecipes(filteredMeals, "recipe not found");
 }
 
-searchInp.addEventListener("keyup", debounce(searchRecipes));
+searchInp.addEventListener("keyup", searchRecipes);
