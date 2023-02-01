@@ -93,7 +93,7 @@ function debounce(fn) {
     clearTimeout(timer);
     timer = setTimeout(() => {
       fn();
-    }, 500);
+    }, 300);
   };
 }
 
@@ -106,4 +106,4 @@ async function searchRecipes() {
   drawUiRecipes(filteredMeals, "recipe not found");
 }
 
-searchInp.addEventListener("keyup", searchRecipes);
+searchInp.addEventListener("keyup", debounce(searchRecipes));
